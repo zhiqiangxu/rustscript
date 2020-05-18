@@ -1,6 +1,8 @@
 package vm
 
 import (
+	"fmt"
+
 	"github.com/go-interpreter/wagon/exec"
 	"github.com/go-interpreter/wagon/validate"
 	"github.com/go-interpreter/wagon/wasm"
@@ -20,6 +22,10 @@ func NewEngine(wasmCode []byte) Engine {
 	return &engine{wasmCode: wasmCode}
 }
 
+const (
+	methodName = "invoke"
+)
+
 func (e *engine) Execute() (ret interface{}, err error) {
 
 	m, err := ReadWasmModule(e.wasmCode, newHostModule())
@@ -32,12 +38,19 @@ func (e *engine) Execute() (ret interface{}, err error) {
 		return
 	}
 
+	entry, ok := m.Export.Entries[methodName]
+	if !ok {
+		err = fmt.Errorf("invoke not found")
+		return
+	}
+
+	index := int64(entry.Index)
+
 	vm, err := exec.NewVM(m)
 	if err != nil {
 		return
 	}
 
-	index := int64(m.Start.Index)
 	ret, err = vm.ExecCode(index)
 
 	return

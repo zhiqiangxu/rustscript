@@ -14,10 +14,10 @@ func main() {
 
 	app := &cli.App{
 		Name:  "rs",
-		Usage: "rs wsfile",
+		Usage: "rs wasm_file",
 		Action: func(c *cli.Context) (err error) {
 			if c.NArg() != 1 {
-				err = fmt.Errorf("wsfile missing")
+				err = fmt.Errorf("wasm_file missing")
 				return
 			}
 			wsFile := c.Args().Get(0)
