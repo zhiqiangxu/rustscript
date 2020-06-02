@@ -1,4 +1,4 @@
 # rustscript 
 
-run rust like script
+run rust(build with [rs-build](https://github.com/zhiqiangxu/rs-build)) like script
 
